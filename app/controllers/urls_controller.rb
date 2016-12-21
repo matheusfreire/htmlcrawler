@@ -16,8 +16,17 @@ class UrlsController < ApplicationController
   # POST /urls
   def create
     @url = Url.new(url_params)
-
-    if @url.save
+    unless @url.path.downcase.start_with?('http://','https://')
+      @url.self.path.prepend('http://')
+    end
+    if @url.path.downcase.start_with?('https://')
+      @url.path = @url.path.gsub('https://','http://')
+    end
+    if Url.find_by(path: @url.path) != nil
+      render json: { error: { message: "Url already indexed" } }
+      return
+    end
+    if @url.create
       render json: @url, status: :created, location: @url
     else
       render json: @url.errors, status: :unprocessable_entity
@@ -46,6 +55,6 @@ class UrlsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def url_params
-      params.fetch(:url, {})
+      params.require(:url).permit(:path)
     end
 end
