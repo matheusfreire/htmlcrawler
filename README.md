@@ -30,3 +30,26 @@
 * Deployment instructions
     Run: `rake server` 
 
+#### First Endpoint
+
+To use this htmlcrawler, call this url to crawler the url in POST way
+
+```
+http://localhost:3000/urls
+```
+
+And the JSON will must as parameter:
+
+```
+{
+	"url[path]": "https://www.{changeme}.com.br"
+}
+```
+
+#### Second endpoint
+
+The second endpoint returns the url and links and titles stored
+
+```
+http://localhost:3000/url/1
+```

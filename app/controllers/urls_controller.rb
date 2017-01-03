@@ -52,7 +52,7 @@ class UrlsController < ApplicationController
 
     def set_begin_path
       unless @url.path.downcase.start_with?('http://','https://')
-        @url.self.path.prepend('http://')
+        @url.path = @url.path.prepend('http://')
       end
       if @url.path.downcase.start_with?('https://')
         @url.path = @url.path.gsub('https://','http://')
