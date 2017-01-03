@@ -27,6 +27,20 @@ class Url < ApplicationRecord
     end
   end
 
+  def update
+    begin
+      tags = Tag.find_by_url(url: self)
+      unless tags.nil?
+        tags.each do |t|
+          t.destroy
+        end
+      end
+      create
+    rescue Errno::ENOENT, SocketError
+      self.erros.add(:path, :s, message: "Url not found")
+    end
+  end
+
   private
     def create_links(links)
       if links.length > 1
@@ -36,12 +50,12 @@ class Url < ApplicationRecord
       end
     end
 
-  def create_titles(tag, element)
-    if tag.length > 1
-      for i in 0..tag.length-1
-        Tag.create_text(tag, i, self, element)
+    def create_titles(tag, element)
+      if tag.length > 1
+        for i in 0..tag.length-1
+          Tag.create_text(tag, i, self, element)
+        end
       end
     end
-  end
 
 end

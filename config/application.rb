@@ -28,5 +28,6 @@ module Htmlcrawler
     config.api_only = true
 
     config.debug_exception_response_format = :api
+    config.encoding = "utf-8"
   end
 end
